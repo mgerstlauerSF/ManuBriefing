@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snowflake Manufacturing Briefing: Michael Wieland, RVP DACH/CEE</title>
+    <title>Snowflake Manufacturing Briefing: DACH/CEE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
@@ -45,18 +45,37 @@
                 <h1 class="text-3xl font-bold mb-2">Manufacturing Strategy & Execution</h1>
                 <p class="text-stone-400">Field CTO Briefing: Technical GTM Enabler for DACH / CEE</p>
             </div>
-            <div class="p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Enable Innovation -->
+                <div class="bg-stone-50 p-6 rounded-xl border-t-4 border-emerald-600 flex flex-col">
+                    <h3 class="font-bold text-emerald-800 mb-2">Enable Innovation</h3>
+                    <p class="text-sm text-stone-600 leading-relaxed mb-3">Pioneering the future of the factory floor through advanced edge-to-cloud computing.</p>
+                    <div class="space-y-1 mb-4">
+                        <div class="text-[10px] font-bold text-emerald-700 uppercase">Key Examples:</div>
+                        <div class="text-[11px] text-stone-700">• Siemens Industrial Edge Partnership</div>
+                        <div class="text-[11px] text-stone-700">• tesa Edge Inference</div>
+                    </div>
+                    <a href="https://press.siemens.com/global/en/pressrelease/siemens-and-snowflake-enable-itot-convergence-across-edge-and-cloud-industrial" target="_blank" class="mt-auto inline-flex items-center text-[11px] font-bold text-emerald-700 hover:text-emerald-800 underline decoration-emerald-200 hover:decoration-emerald-500 transition-all">
+                        View Siemens Partnership Release ↗
+                    </a>
+                </div>
+                
+                <!-- Sales Enablement and Execution -->
                 <div class="bg-stone-50 p-6 rounded-xl border-t-4 border-sky-600">
-                    <h3 class="font-bold text-sky-800 mb-2">Strategic Enablement</h3>
+                    <h3 class="font-bold text-sky-800 mb-2">Sales Enablement & Execution</h3>
                     <p class="text-sm text-stone-600 leading-relaxed">Enabling SEs and Partners to <strong>better qualify potential</strong> and navigate complex industrial discovery independently.</p>
                 </div>
-                <div class="bg-stone-50 p-6 rounded-xl border-t-4 border-sky-600">
-                    <h3 class="font-bold text-sky-800 mb-2">Global Leadership</h3>
-                    <p class="text-sm text-stone-600 leading-relaxed">Driving Snowflake's position as the global standard for Industry 4.0, with DACH as our technical benchmark.</p>
-                </div>
+
+                <!-- EMEA Community -->
                 <div class="bg-stone-50 p-6 rounded-xl border-t-4 border-sky-600">
                     <h3 class="font-bold text-sky-800 mb-2">EMEA Community</h3>
                     <p class="text-sm text-stone-600 leading-relaxed">Leading the <strong>Active EMEA Manufacturing SE community</strong> through solution frameworks and standardized assets.</p>
+                </div>
+
+                <!-- Ambition: Global Leadership -->
+                <div class="bg-stone-50 p-6 rounded-xl border-t-4 border-sky-600">
+                    <h3 class="font-bold text-sky-800 mb-2">Ambition: Global Leadership</h3>
+                    <p class="text-sm text-stone-600 leading-relaxed">Driving Snowflake's position as the global standard for Industry 4.0, with DACH as our technical benchmark.</p>
                 </div>
             </div>
         </section>
@@ -183,9 +202,30 @@
         };
 
         const regions = {
-            germany: { title: "Germany", status: "Global Benchmark", accounts: "Siemens (Largest globally), VW, BMW Group, Siemens Healthineers", motions: "tesa, Kiwigrid, Sievert, FFT" },
-            switzerland: { title: "Switzerland", status: "Challenged", accounts: "Targeting Industrials against MSFT dominance", motions: "Requires tactical 'Best of Breed' focus" },
-            cee: { title: "Austria / CEE", status: "Greenfield", accounts: "Zero current interaction", motions: "High-priority expansion target for FY27" }
+            germany: { 
+                title: "Germany", 
+                status: "Global Benchmark", 
+                accountsLabel: "Global Accounts",
+                motionsLabel: "Enterprise Accounts",
+                accounts: "Siemens (Largest globally), VW, BMW Group, Siemens Healthineers", 
+                motions: "tesa, Kiwigrid, Sievert, FFT" 
+            },
+            switzerland: { 
+                title: "Switzerland", 
+                status: "Challenged", 
+                accountsLabel: "Global Accounts",
+                motionsLabel: "Key Motions",
+                accounts: "ABB, Many CPG accounts with Manu Use Cases.", 
+                motions: "Microsoft dominance, Requires tactical 'Best of Breed' focus" 
+            },
+            cee: { 
+                title: "Austria / CEE", 
+                status: "Greenfield", 
+                accountsLabel: "Strategic Accounts",
+                motionsLabel: "Key Motions",
+                accounts: "Zero current interaction", 
+                motions: "Potential expansion target for FY27" 
+            }
         };
 
         function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
@@ -231,8 +271,8 @@
                                     <h3 class="text-2xl font-bold text-stone-800">${data.title}</h3>
                                     <div class="text-xs font-bold text-sky-600 uppercase mb-4 tracking-widest">${data.status}</div>
                                     <div class="space-y-4">
-                                        <div><div class="text-xs font-bold text-stone-400 uppercase">Strategic Accounts</div><div class="text-sm font-medium mt-1">${data.accounts}</div></div>
-                                        <div><div class="text-xs font-bold text-stone-400 uppercase">Key Motions</div><div class="text-sm text-stone-600 mt-1">${data.motions}</div></div>
+                                        <div><div class="text-xs font-bold text-stone-400 uppercase">${data.accountsLabel}</div><div class="text-sm font-medium mt-1">${data.accounts}</div></div>
+                                        <div><div class="text-xs font-bold text-stone-400 uppercase">${data.motionsLabel}</div><div class="text-sm text-stone-600 mt-1">${data.motions}</div></div>
                                     </div>
                                 </div>
                             `;
