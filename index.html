@@ -1,548 +1,532 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.3">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snowflake Manufacturing Briefing: DACH/CEE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <!-- Chosen Palette: Warm Neutrals & Corporate Clarity -->
+    <!-- 
+         Backgrounds: Stone-50 (#fafaf9), Stone-100 (#f5f5f4)
+         Cards: White (#ffffff)
+         Text: Stone-800 (#292524), Stone-600 (#57534e)
+         Accents: 
+            - Primary/Tech: Sky-700 (#0369a1) -> Used for active states and tech focus
+            - Alert/Critical: Amber-600 (#d97706) -> Used for the "Ownership Gap"
+            - Success/Growth: Emerald-600 (#059669) -> Used for "Greenfield" indicators
+    -->
+
+    <!-- Application Structure Plan:
+         1. Hero Section: Sets the context (Field CTO Role) and immediate value prop.
+         2. Sales Playbook (MOVED): An interactive grid of cards explaining the 4 key technical plays. 
+         3. Regional Strategy Dashboard: A split view with an interactive "Maturity vs. Opportunity" Scatter Plot.
+         4. FY27 Strategic Priorities: A horizontal bar chart visualizing the "Effort vs. Impact".
+         5. The "Ownership Gap" CTA: A distinct section highlighting the missing business ownership.
+         
+         Why this structure? It follows a logical flow: Who am I? -> What are we selling/solving? -> Where is it happening? -> How do we scale? -> What do I need from you?
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Sales Plays (Interactive Cards): 
+            - Goal: Explain complex technical concepts (IT/OT, UNS).
+            - Viz: HTML/CSS Grid with JS toggle.
+            - Justification: Placed early to establish the 'product' before the 'market'.
+         2. Regional Matrix (Scatter Plot): 
+            - Goal: Compare regions based on current footprint vs. future potential.
+            - Viz: Chart.js Scatter. X-Axis = Opportunity, Y-Axis = Maturity.
+         3. FY27 Priorities (Bar Chart):
+            - Goal: Show where the work will be done in FY27.
+            - Viz: Chart.js Horizontal Bar.
+         4. NO SVG/Mermaid used. All icons are unicode or CSS shapes. All charts are Canvas.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        /* Custom Chart Container Styles as per requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Base height */
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Smooth transitions for interactive elements */
+        .transition-all {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 300ms;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
 </head>
-<body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Snowflake Manufacturing Briefing: DACH/CEE&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"&gt;&lt;/script&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Chosen Palette: Warm Neutrals &amp; Corporate Clarity --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!--<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">         </span>Backgrounds: Stone-50 (#fafaf9), Stone-100 (#f5f5f4)</p>
-<p class="p1"><span class="Apple-converted-space">         </span>Cards: White (#ffffff)</p>
-<p class="p1"><span class="Apple-converted-space">         </span>Text: Stone-800 (#292524), Stone-600 (#57534e)</p>
-<p class="p1"><span class="Apple-converted-space">         </span>Accents:<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>- Primary/Tech: Sky-700 (#0369a1) -&gt; Used for active states and tech focus</p>
-<p class="p1"><span class="Apple-converted-space">            </span>- Alert/Critical: Amber-600 (#d97706) -&gt; Used for the "Ownership Gap"</p>
-<p class="p1"><span class="Apple-converted-space">            </span>- Success/Growth: Emerald-600 (#059669) -&gt; Used for "Greenfield" indicators</p>
-<p class="p1"><span class="Apple-converted-space">    </span>--&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Application Structure Plan:</p>
-<p class="p1"><span class="Apple-converted-space">         </span>1. Hero Section: Sets the context (Field CTO Role) and immediate value prop.</p>
-<p class="p1"><span class="Apple-converted-space">         </span>2. Sales Playbook (MOVED): An interactive grid of cards explaining the 4 key technical plays.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">         </span>3. Regional Strategy Dashboard: A split view with an interactive "Maturity vs. Opportunity" Scatter Plot.</p>
-<p class="p1"><span class="Apple-converted-space">         </span>4. FY27 Strategic Priorities: A horizontal bar chart visualizing the "Effort vs. Impact".</p>
-<p class="p1"><span class="Apple-converted-space">         </span>5. The "Ownership Gap" CTA: A distinct section highlighting the missing business ownership.</p>
-<p class="p2"><span class="Apple-converted-space">         </span></p>
-<p class="p1"><span class="Apple-converted-space">         </span>Why this structure? It follows a logical flow: Who am I? -&gt; What are we selling/solving? -&gt; Where is it happening? -&gt; How do we scale? -&gt; What do I need from you?</p>
-<p class="p1"><span class="Apple-converted-space">    </span>--&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Visualization &amp; Content Choices:</p>
-<p class="p1"><span class="Apple-converted-space">         </span>1. Sales Plays (Interactive Cards):<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>- Goal: Explain complex technical concepts (IT/OT, UNS).</p>
-<p class="p1"><span class="Apple-converted-space">            </span>- Viz: HTML/CSS Grid with JS toggle.</p>
-<p class="p1"><span class="Apple-converted-space">            </span>- Justification: Placed early to establish the 'product' before the 'market'.</p>
-<p class="p1"><span class="Apple-converted-space">         </span>2. Regional Matrix (Scatter Plot):<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>- Goal: Compare regions based on current footprint vs. future potential.</p>
-<p class="p1"><span class="Apple-converted-space">            </span>- Viz: Chart.js Scatter. X-Axis = Opportunity, Y-Axis = Maturity.</p>
-<p class="p1"><span class="Apple-converted-space">         </span>3. FY27 Priorities (Bar Chart):</p>
-<p class="p1"><span class="Apple-converted-space">            </span>- Goal: Show where the work will be done in FY27.</p>
-<p class="p1"><span class="Apple-converted-space">            </span>- Viz: Chart.js Horizontal Bar.</p>
-<p class="p1"><span class="Apple-converted-space">         </span>4. NO SVG/Mermaid used. All icons are unicode or CSS shapes. All charts are Canvas.</p>
-<p class="p1"><span class="Apple-converted-space">    </span>--&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. --&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Custom Chart Container Styles as per requirements */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.chart-container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 600px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-left: auto;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-right: auto;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 300px; /* Base height */</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-height: 400px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@media (min-width: 768px) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>.chart-container {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>height: 350px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Smooth transitions for interactive elements */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.transition-all {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition-property: all;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition-duration: 300ms;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.card-hover:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-2px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body class="bg-stone-50 text-stone-800 font-sans antialiased selection:bg-sky-200 selection:text-sky-900"&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Navigation / Header --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;header class="bg-white border-b border-stone-200 sticky top-0 z-50"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex justify-between h-16 items-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="flex items-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;span class="text-2xl font-bold text-sky-800 tracking-tight"&gt;Snowflake &lt;span class="text-stone-500 font-light"&gt;| Manufacturing&lt;/span&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;nav class="hidden md:flex space-x-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button onclick="scrollToSection('role')" class="text-stone-500 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium transition-colors"&gt;Role&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button onclick="scrollToSection('plays')" class="text-stone-500 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium transition-colors"&gt;Sales Plays&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button onclick="scrollToSection('landscape')" class="text-stone-500 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium transition-colors"&gt;Region&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button onclick="scrollToSection('strategy')" class="text-stone-500 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium transition-colors"&gt;Strategy&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button onclick="scrollToSection('gap')" class="text-amber-600 hover:text-amber-800 bg-amber-50 hover:bg-amber-100 px-3 py-2 rounded-md text-sm font-bold transition-colors"&gt;The Gap&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/nav&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/header&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12"&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Section 1: Introduction &amp; Role --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="role" class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="bg-gradient-to-r from-stone-800 to-stone-700 px-8 py-10 text-white"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1 class="text-3xl md:text-4xl font-bold mb-4"&gt;Briefing: Manufacturing Strategy &amp; Execution&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p class="text-stone-300 text-lg max-w-3xl"&gt;DACH / CEE Field CTO Briefing for the Area VP&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-8 grid grid-cols-1 lg:grid-cols-3 gap-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="col-span-1 lg:col-span-2 space-y-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h2 class="text-2xl font-bold text-stone-800"&gt;The Field CTO: Technical GTM Enabler&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-stone-600 leading-relaxed"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>The Field CTO serves as the "Technical Force Multiplier" for the region, bridging the critical gap between deep product engineering and C-suite business outcomes. This role is not just about architecture; it is about market making.</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-stone-50 p-4 rounded-lg border-l-4 border-sky-600"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="font-bold text-sky-800 mb-2"&gt;Strategic Enablement&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-sm text-stone-600"&gt;Empowering SEs, Sales, and Partners to &lt;strong&gt;qualify manufacturing potential&lt;/strong&gt; and navigate discovery independently.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-stone-50 p-4 rounded-lg border-l-4 border-sky-600"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="font-bold text-sky-800 mb-2"&gt;Customer Interaction&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-sm text-stone-600"&gt;Leading high-touch architectural alignment for strategic accounts to drive massive consumption.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-stone-50 p-4 rounded-lg border-l-4 border-sky-600"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="font-bold text-sky-800 mb-2"&gt;Community Scale&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-sm text-stone-600"&gt;Driving the &lt;strong&gt;EMEA Manufacturing SE community&lt;/strong&gt; to scale expertise from 1:1 support to 1:Many assets.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="col-span-1 bg-sky-50 rounded-xl p-6 flex flex-col justify-center items-center text-center border border-sky-100"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="text-5xl mb-4"&gt;🏭&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-xl font-bold text-sky-900"&gt;Global Leadership&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-sm text-sky-800 mt-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>DACH is the engine room of Snowflake's global manufacturing success.</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Section 2: Key Sales Plays (Interactive Cards) - MOVED UP --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="plays"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-2xl font-bold text-stone-800"&gt;Key Sales Plays: The "Industrial Data" Value Prop&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p class="text-stone-600 mt-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>We win by moving Snowflake into the heart of the factory and supply chain. Select a card to explore the technical value proposition that drives our high-consumption patterns.</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="playCardsContainer"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- Play Card 1 --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="selectPlay('itot')" class="play-card group bg-white hover:bg-sky-50 p-6 rounded-xl border border-stone-200 text-left transition-all focus:outline-none focus:ring-2 focus:ring-sky-500" data-play="itot"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="text-3xl mb-3 group-hover:scale-110 transition-transform"&gt;🔌&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="font-bold text-stone-800 group-hover:text-sky-700"&gt;IT/OT Integration&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-xs text-stone-500 mt-2"&gt;The "Data Mesh" success&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- Play Card 2 --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="selectPlay('sap')" class="play-card group bg-white hover:bg-sky-50 p-6 rounded-xl border border-stone-200 text-left transition-all focus:outline-none focus:ring-2 focus:ring-sky-500" data-play="sap"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="text-3xl mb-3 group-hover:scale-110 transition-transform"&gt;🔗&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="font-bold text-stone-800 group-hover:text-sky-700"&gt;SAP + Non-SAP&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-xs text-stone-500 mt-2"&gt;Breaking Data Silos&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- Play Card 3 --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="selectPlay('timeseries')" class="play-card group bg-white hover:bg-sky-50 p-6 rounded-xl border border-stone-200 text-left transition-all focus:outline-none focus:ring-2 focus:ring-sky-500" data-play="timeseries"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="text-3xl mb-3 group-hover:scale-110 transition-transform"&gt;📈&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="font-bold text-stone-800 group-hover:text-sky-700"&gt;Time Series&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-xs text-stone-500 mt-2"&gt;High-frequency Analytics&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- Play Card 4 --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="selectPlay('uns')" class="play-card group bg-white hover:bg-sky-50 p-6 rounded-xl border border-stone-200 text-left transition-all focus:outline-none focus:ring-2 focus:ring-sky-500" data-play="uns"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="text-3xl mb-3 group-hover:scale-110 transition-transform"&gt;🏗️&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="font-bold text-stone-800 group-hover:text-sky-700"&gt;Unified Name Space&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-xs text-stone-500 mt-2"&gt;Modern Architecture Hub&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- Dynamic Play Detail Area --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="playDetail" class="mt-6 bg-stone-100 rounded-xl p-8 border border-stone-200 hidden"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h3 id="playTitle" class="text-xl font-bold text-sky-800 mb-2"&gt;&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p id="playDescription" class="text-stone-700"&gt;&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Section 3: Regional Landscape (Interactive Dashboard) --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="landscape"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-2xl font-bold text-stone-800"&gt;Regional Landscape: Maturity vs. Opportunity&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p class="text-stone-600 mt-2 max-w-4xl"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>Once we establish the play, we must look at the terrain. We have a stark contrast between our global benchmark markets (Germany) and high-potential greenfields (CEE).</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- Left: Chart --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-4"&gt;Regional Matrix&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="chart-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;canvas id="regionalChart"&gt;&lt;/canvas&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-xs text-center text-stone-400 mt-4 italic"&gt;Click on a bubble to view detailed status.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- Right: Dynamic Details Panel --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="regionDetailPanel" class="bg-white p-8 rounded-xl shadow-sm border border-stone-200 h-full flex flex-col justify-center transition-all"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- Default Content --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="text-center space-y-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="text-4xl text-stone-300"&gt;🗺️&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3 class="text-xl font-bold text-stone-400"&gt;Select a Region&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-stone-400"&gt;Click on a region in the matrix to see key customers, status, and strategic motions.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Section 4: Strategic Focus FY27 --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="strategy" class="grid grid-cols-1 lg:grid-cols-3 gap-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="col-span-1 lg:col-span-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-2xl font-bold text-stone-800"&gt;Strategic Focus for FY27&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p class="text-stone-600 mt-2"&gt;To institutionalize our lead and scale the region, we are shifting focus from "establishing presence" to "scaling and specialized expansion."&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- Priority Chart --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="col-span-1 lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-stone-200"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h3 class="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-4"&gt;Priority Intensity &amp; Impact&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="chart-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;canvas id="strategyChart"&gt;&lt;/canvas&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- Text Summary of Priorities --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="col-span-1 space-y-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="bg-white p-5 rounded-xl border border-stone-200 shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="font-bold text-sky-700"&gt;Auto FCTO Ramp-up&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-sm text-stone-600 mt-1"&gt;Focused execution to capture the massive shift toward software-defined vehicles and EV production.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="bg-white p-5 rounded-xl border border-stone-200 shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="font-bold text-emerald-700"&gt;Reference Velocity&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-sm text-stone-600 mt-1"&gt;Goal: Secure &lt;strong&gt;2 additional strong, public references&lt;/strong&gt; in DACH to validate our dominance.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="bg-white p-5 rounded-xl border border-stone-200 shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="font-bold text-stone-700"&gt;Partner Scaling&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-sm text-stone-600 mt-1"&gt;Moving beyond general SIs to enable &lt;strong&gt;manufacturing-niche partners&lt;/strong&gt; who understand the factory floor.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Section 5: The Gap (CTA) --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="gap" class="bg-amber-50 rounded-2xl border border-amber-200 overflow-hidden shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-8 md:p-12 grid grid-cols-1 md:grid-cols-3 gap-8 items-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="md:col-span-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex items-center space-x-3 mb-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="text-3xl"&gt;⚠️&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h2 class="text-2xl font-bold text-amber-900"&gt;The "Ownership Vacuum": A Critical Risk&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-amber-900/80 leading-relaxed text-lg mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>Despite having the world's largest manufacturing deal (Siemens) and a leading technical strategy, there is &lt;strong&gt;no business owner&lt;/strong&gt; officially in charge of the Manufacturing vertical for DACH/CEE.</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;ul class="space-y-3 mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li class="flex items-start"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="text-amber-600 font-bold mr-2"&gt;➤&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="text-amber-800 text-sm"&gt;&lt;strong&gt;The Risk:&lt;/strong&gt; We lack a counterpart to drive regional accountability, campaigns, and expansion strategy (CEE).&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li class="flex items-start"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="text-amber-600 font-bold mr-2"&gt;➤&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="text-amber-800 text-sm"&gt;&lt;strong&gt;The Ask:&lt;/strong&gt; Define who owns the "Business Perspective" to ensure technical momentum translates to revenue.&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="md:col-span-1 flex justify-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="bg-white p-6 rounded-xl shadow-sm text-center border border-amber-100 w-full"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3 class="text-amber-800 font-bold mb-2"&gt;Current Status&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="text-4xl font-bold text-stone-300 mb-2"&gt;?&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-xs text-stone-500 uppercase tracking-widest"&gt;Business Owner Missing&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;footer class="bg-stone-900 text-stone-400 py-12 mt-12"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="max-w-7xl mx-auto px-4 text-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="text-sm"&gt;Prepared for the Area VP DACH/CEE Briefing | FY27 Strategy&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="text-xs mt-2 text-stone-600"&gt;Strictly Confidential&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/footer&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>// --- Data Storage ---</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const regionsData = {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>germany: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>title: "Germany",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>status: "Global Benchmark",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>statusColor: "text-emerald-600",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>description: "The engine room of our success. Home to our largest global manufacturing deal.",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>keyCustomers: ["Siemens (Global #1)", "Siemens Energy", "Siemens Healthineers", "VW", "BMW Group"],</p>
-<p class="p1"><span class="Apple-converted-space">                </span>motions: ["tesa", "Kiwigrid", "Sievert", "FFT"],</p>
-<p class="p1"><span class="Apple-converted-space">                </span>challenge: "Maintenance of high-touch relationships while scaling mid-market."</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>switzerland: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>title: "Switzerland",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>status: "Challenged",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>statusColor: "text-amber-600",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>description: "Facing heavy Microsoft dominance. Requires a tactical 'Best of Breed' narrative.",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>keyCustomers: ["Targeting Pharma &amp; Precision Engineering"],</p>
-<p class="p1"><span class="Apple-converted-space">                </span>motions: ["Limited active engagement due to Azure stack dominance"],</p>
-<p class="p1"><span class="Apple-converted-space">                </span>challenge: "Winning against the full Microsoft stack."</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>austria: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>title: "Austria / CEE",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>status: "Greenfield Opportunity",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>statusColor: "text-sky-600",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>description: "Currently zero interaction. Represents the largest untapped expansion opportunity for FY27.",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>keyCustomers: ["None (Target List Building)"],</p>
-<p class="p1"><span class="Apple-converted-space">                </span>motions: ["Expansion Planned for FY27"],</p>
-<p class="p1"><span class="Apple-converted-space">                </span>challenge: "Zero footprint; requires structured entry plan."</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const playsData = {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>itot: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>title: "IT/OT Integration",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>description: "Unifying shop-floor telemetry (sensors/PLCs) with enterprise business systems. This is the core of the &lt;strong&gt;Siemens 'Data Mesh' success&lt;/strong&gt; story, proving we can handle operational reality."</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>sap: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>title: "SAP + Non-SAP Fusion",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>description: "Breaking silos by combining SAP ERP data with real-time industrial telemetry. This provides the C-suite with a true 360° view of operations that SAP alone cannot provide."</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>timeseries: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>title: "Time Series Analytics",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>description: "Delivering high-performance analysis on high-frequency machine data. Critical for predictive maintenance and quality assurance use cases where speed and volume are paramount."</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>uns: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>title: "Unified Name Space (UNS)",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>description: "Positioning Snowflake as the central architectural hub for modern industrial data. We become the 'single source of truth' for the entire factory of the future."</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// --- Interaction Logic ---</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// 1. Navigation Scroll</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function scrollToSection(id) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById(id).scrollIntoView({ behavior: 'smooth' });</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// 2. Play Selection Logic</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function selectPlay(playKey) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const container = document.getElementById('playDetail');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const titleEl = document.getElementById('playTitle');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const descEl = document.getElementById('playDescription');</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Highlight active card styling</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.play-card').forEach(card =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if(card.dataset.play === playKey) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>card.classList.remove('bg-white', 'border-stone-200');</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>card.classList.add('bg-sky-50', 'border-sky-300', 'ring-2', 'ring-sky-500');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>card.classList.add('bg-white', 'border-stone-200');</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>card.classList.remove('bg-sky-50', 'border-sky-300', 'ring-2', 'ring-sky-500');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Populate and Show Detail</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const play = playsData[playKey];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>titleEl.innerHTML = play.title;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>descEl.innerHTML = play.description;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>container.classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Little animation for attention</p>
-<p class="p1"><span class="Apple-converted-space">            </span>container.classList.remove('opacity-0');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>container.classList.add('animate-pulse');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; container.classList.remove('animate-pulse'), 500);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// 3. Region Selection Logic (triggered by chart click)</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function updateRegionPanel(regionKey) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const panel = document.getElementById('regionDetailPanel');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const data = regionsData[regionKey];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!data) return;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const html = `</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="animate-fade-in-up"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex justify-between items-start mb-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3 class="text-2xl font-bold text-stone-800"&gt;${data.title}&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="px-3 py-1 rounded-full bg-stone-100 text-xs font-bold uppercase ${data.statusColor}"&gt;${data.status}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-stone-600 mb-6 border-l-4 border-stone-300 pl-4 italic"&gt;${data.description}&lt;/p&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="space-y-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h4 class="text-xs font-bold text-stone-500 uppercase tracking-wide"&gt;Key Customers/Targets&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="flex flex-wrap gap-2 mt-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>${data.keyCustomers.map(c =&gt; `&lt;span class="bg-sky-50 text-sky-800 text-xs px-2 py-1 rounded border border-sky-100"&gt;${c}&lt;/span&gt;`).join('')}</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span></p>
-<p class="p1"><span class="Apple-converted-space">                         </span>${data.motions[0] !== "Limited active engagement due to Azure stack dominance" &amp;&amp; data.motions[0] !== "Expansion Planned for FY27" ? `</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h4 class="text-xs font-bold text-stone-500 uppercase tracking-wide"&gt;Regional Motions&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="text-sm text-stone-600 mt-1"&gt;${data.motions.join(', ')}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>` : ''}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-stone-50 p-4 rounded-lg mt-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h4 class="text-xs font-bold text-amber-700 uppercase tracking-wide mb-1"&gt;Key Challenge&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-sm text-stone-700"&gt;${data.challenge}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>panel.innerHTML = html;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// --- Chart Initialization ---</p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.addEventListener('DOMContentLoaded', function() {</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Chart 1: Regional Scatter Plot</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const ctxRegion = document.getElementById('regionalChart').getContext('2d');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const regionalChart = new Chart(ctxRegion, {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>type: 'bubble',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>data: {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>datasets: [{</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>label: 'Regions',</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>data: [</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>{ x: 95, y: 90, r: 25, region: 'germany' },<span class="Apple-converted-space">  </span>// Germany: High Opp, High Maturity</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>{ x: 60, y: 30, r: 15, region: 'switzerland' }, // Switzerland: Med Opp, Low Maturity</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>{ x: 80, y: 10, r: 20, region: 'austria' } <span class="Apple-converted-space">  </span>// Austria/CEE: High Opp, Zero Maturity</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>],</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>backgroundColor: [</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>'rgba(5, 150, 105, 0.6)', // Emerald (Germany)</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>'rgba(217, 119, 6, 0.6)', // Amber (Switzerland)</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>'rgba(2, 132, 199, 0.6)'<span class="Apple-converted-space">  </span>// Sky (Austria/CEE)</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>],</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>borderColor: [</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>'rgb(5, 150, 105)',</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>'rgb(217, 119, 6)',</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>'rgb(2, 132, 199)'</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>],</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>borderWidth: 1</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}]</p>
-<p class="p1"><span class="Apple-converted-space">                </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                </span>options: {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>responsive: true,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>maintainAspectRatio: false,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>scales: {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>x: {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>title: { display: true, text: 'Market Opportunity Size' },</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>min: 40, max: 110,</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>grid: { display: false }</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>y: {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>title: { display: true, text: 'Current Maturity / Engagement' },</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>min: 0, max: 110</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>plugins: {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>tooltip: {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>callbacks: {</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>label: function(context) {</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>const map = { 'germany': 'Germany', 'switzerland': 'Switzerland', 'austria': 'Austria / CEE' };</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>return map[context.raw.region];</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>legend: { display: false }</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>onClick: (e) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>const points = regionalChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true);</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>if (points.length) {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>const firstPoint = points[0];</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>const regionKey = regionalChart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index].region;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>updateRegionPanel(regionKey);</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Initialize detail panel with Germany</p>
-<p class="p1"><span class="Apple-converted-space">            </span>updateRegionPanel('germany');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Chart 2: Strategy Horizontal Bar</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const ctxStrategy = document.getElementById('strategyChart').getContext('2d');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const strategyChart = new Chart(ctxStrategy, {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>type: 'bar',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>data: {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>labels: ['Auto Ramp-up', 'Reference Velocity', 'Partner Scaling', 'Address Product Gaps', 'SE Industrialization'],</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>datasets: [{</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>label: 'Strategic Priority Level',</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>data: [90, 85, 75, 60, 80],</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>backgroundColor: [</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>'rgba(3, 105, 161, 0.7)', // Sky</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>'rgba(5, 150, 105, 0.7)', // Emerald</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>'rgba(217, 119, 6, 0.7)', // Amber</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>'rgba(87, 83, 78, 0.7)',<span class="Apple-converted-space">  </span>// Stone</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>'rgba(87, 83, 78, 0.7)' <span class="Apple-converted-space">  </span>// Stone</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>],</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>borderRadius: 4</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}]</p>
-<p class="p1"><span class="Apple-converted-space">                </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                </span>options: {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>indexAxis: 'y', // Horizontal bar</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>responsive: true,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>maintainAspectRatio: false,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>scales: {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>x: {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>display: false, // Hide x-axis numbers for cleaner look</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>max: 100</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>y: {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>grid: { display: false }</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>plugins: {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>legend: { display: false },</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>tooltip: {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>callbacks: {</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>label: function(context) {</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>return 'Priority Score: ' + context.raw;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+<body class="bg-stone-50 text-stone-800 font-sans antialiased selection:bg-sky-200 selection:text-sky-900">
+
+    <!-- Navigation / Header -->
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-sky-800 tracking-tight">Snowflake <span class="text-stone-500 font-light">| Manufacturing</span></span>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <button onclick="scrollToSection('role')" class="text-stone-500 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium transition-colors">Role</button>
+                    <button onclick="scrollToSection('plays')" class="text-stone-500 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium transition-colors">Sales Plays</button>
+                    <button onclick="scrollToSection('landscape')" class="text-stone-500 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium transition-colors">Region</button>
+                    <button onclick="scrollToSection('strategy')" class="text-stone-500 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium transition-colors">Strategy</button>
+                    <button onclick="scrollToSection('gap')" class="text-amber-600 hover:text-amber-800 bg-amber-50 hover:bg-amber-100 px-3 py-2 rounded-md text-sm font-bold transition-colors">The Gap</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- Section 1: Introduction & Role -->
+        <section id="role" class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+            <div class="bg-gradient-to-r from-stone-800 to-stone-700 px-8 py-10 text-white">
+                <h1 class="text-3xl md:text-4xl font-bold mb-4">Briefing: Manufacturing Strategy & Execution</h1>
+                <p class="text-stone-300 text-lg max-w-3xl">DACH / CEE Field CTO Briefing for the Area VP</p>
+            </div>
+            
+            <div class="p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="col-span-1 lg:col-span-2 space-y-4">
+                    <h2 class="text-2xl font-bold text-stone-800">The Field CTO: Technical GTM Enabler</h2>
+                    <p class="text-stone-600 leading-relaxed">
+                        The Field CTO serves as the "Technical Force Multiplier" for the region, bridging the critical gap between deep product engineering and C-suite business outcomes. This role is not just about architecture; it is about market making.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                        <div class="bg-stone-50 p-4 rounded-lg border-l-4 border-sky-600">
+                            <h3 class="font-bold text-sky-800 mb-2">Strategic Enablement</h3>
+                            <p class="text-sm text-stone-600">Empowering SEs, Sales, and Partners to <strong>qualify manufacturing potential</strong> and navigate discovery independently.</p>
+                        </div>
+                        <div class="bg-stone-50 p-4 rounded-lg border-l-4 border-sky-600">
+                            <h3 class="font-bold text-sky-800 mb-2">Customer Interaction</h3>
+                            <p class="text-sm text-stone-600">Leading high-touch architectural alignment for strategic accounts to drive massive consumption.</p>
+                        </div>
+                        <div class="bg-stone-50 p-4 rounded-lg border-l-4 border-sky-600">
+                            <h3 class="font-bold text-sky-800 mb-2">Community Scale</h3>
+                            <p class="text-sm text-stone-600">Driving the <strong>EMEA Manufacturing SE community</strong> to scale expertise from 1:1 support to 1:Many assets.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-span-1 bg-sky-50 rounded-xl p-6 flex flex-col justify-center items-center text-center border border-sky-100">
+                    <div class="text-5xl mb-4">🏭</div>
+                    <h3 class="text-xl font-bold text-sky-900">Global Leadership</h3>
+                    <p class="text-sm text-sky-800 mt-2">
+                        DACH is the engine room of Snowflake's global manufacturing success.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Key Sales Plays (Interactive Cards) - MOVED UP -->
+        <section id="plays">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-stone-800">Key Sales Plays: The "Industrial Data" Value Prop</h2>
+                <p class="text-stone-600 mt-2">
+                    We win by moving Snowflake into the heart of the factory and supply chain. Select a card to explore the technical value proposition that drives our high-consumption patterns.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="playCardsContainer">
+                <!-- Play Card 1 -->
+                <button onclick="selectPlay('itot')" class="play-card group bg-white hover:bg-sky-50 p-6 rounded-xl border border-stone-200 text-left transition-all focus:outline-none focus:ring-2 focus:ring-sky-500" data-play="itot">
+                    <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">🔌</div>
+                    <h3 class="font-bold text-stone-800 group-hover:text-sky-700">IT/OT Integration</h3>
+                    <p class="text-xs text-stone-500 mt-2">The "Data Mesh" success</p>
+                </button>
+
+                <!-- Play Card 2 -->
+                <button onclick="selectPlay('sap')" class="play-card group bg-white hover:bg-sky-50 p-6 rounded-xl border border-stone-200 text-left transition-all focus:outline-none focus:ring-2 focus:ring-sky-500" data-play="sap">
+                    <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">🔗</div>
+                    <h3 class="font-bold text-stone-800 group-hover:text-sky-700">SAP + Non-SAP</h3>
+                    <p class="text-xs text-stone-500 mt-2">Breaking Data Silos</p>
+                </button>
+
+                <!-- Play Card 3 -->
+                <button onclick="selectPlay('timeseries')" class="play-card group bg-white hover:bg-sky-50 p-6 rounded-xl border border-stone-200 text-left transition-all focus:outline-none focus:ring-2 focus:ring-sky-500" data-play="timeseries">
+                    <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">📈</div>
+                    <h3 class="font-bold text-stone-800 group-hover:text-sky-700">Time Series</h3>
+                    <p class="text-xs text-stone-500 mt-2">High-frequency Analytics</p>
+                </button>
+
+                <!-- Play Card 4 -->
+                <button onclick="selectPlay('uns')" class="play-card group bg-white hover:bg-sky-50 p-6 rounded-xl border border-stone-200 text-left transition-all focus:outline-none focus:ring-2 focus:ring-sky-500" data-play="uns">
+                    <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">🏗️</div>
+                    <h3 class="font-bold text-stone-800 group-hover:text-sky-700">Unified Name Space</h3>
+                    <p class="text-xs text-stone-500 mt-2">Modern Architecture Hub</p>
+                </button>
+            </div>
+
+            <!-- Dynamic Play Detail Area -->
+            <div id="playDetail" class="mt-6 bg-stone-100 rounded-xl p-8 border border-stone-200 hidden">
+                <h3 id="playTitle" class="text-xl font-bold text-sky-800 mb-2"></h3>
+                <p id="playDescription" class="text-stone-700"></p>
+            </div>
+        </section>
+
+        <!-- Section 3: Regional Landscape (Interactive Dashboard) -->
+        <section id="landscape">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-stone-800">Regional Landscape: Maturity vs. Opportunity</h2>
+                <p class="text-stone-600 mt-2 max-w-4xl">
+                    Once we establish the play, we must look at the terrain. We have a stark contrast between our global benchmark markets (Germany) and high-potential greenfields (CEE).
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                
+                <!-- Left: Chart -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                    <h3 class="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-4">Regional Matrix</h3>
+                    <div class="chart-container">
+                        <canvas id="regionalChart"></canvas>
+                    </div>
+                    <p class="text-xs text-center text-stone-400 mt-4 italic">Click on a bubble to view detailed status.</p>
+                </div>
+
+                <!-- Right: Dynamic Details Panel -->
+                <div id="regionDetailPanel" class="bg-white p-8 rounded-xl shadow-sm border border-stone-200 h-full flex flex-col justify-center transition-all">
+                    <!-- Default Content -->
+                    <div class="text-center space-y-4">
+                        <div class="text-4xl text-stone-300">🗺️</div>
+                        <h3 class="text-xl font-bold text-stone-400">Select a Region</h3>
+                        <p class="text-stone-400">Click on a region in the matrix to see key customers, status, and strategic motions.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Strategic Focus FY27 -->
+        <section id="strategy" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="col-span-1 lg:col-span-3">
+                <h2 class="text-2xl font-bold text-stone-800">Strategic Focus for FY27</h2>
+                <p class="text-stone-600 mt-2">To institutionalize our lead and scale the region, we are shifting focus from "establishing presence" to "scaling and specialized expansion."</p>
+            </div>
+
+            <!-- Priority Chart -->
+            <div class="col-span-1 lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                <h3 class="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-4">Priority Intensity & Impact</h3>
+                <div class="chart-container">
+                    <canvas id="strategyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Text Summary of Priorities -->
+            <div class="col-span-1 space-y-4">
+                <div class="bg-white p-5 rounded-xl border border-stone-200 shadow-sm">
+                    <h4 class="font-bold text-sky-700">Auto FCTO Ramp-up</h4>
+                    <p class="text-sm text-stone-600 mt-1">Focused execution to capture the massive shift toward software-defined vehicles and EV production.</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-stone-200 shadow-sm">
+                    <h4 class="font-bold text-emerald-700">Reference Velocity</h4>
+                    <p class="text-sm text-stone-600 mt-1">Goal: Secure <strong>2 additional strong, public references</strong> in DACH to validate our dominance.</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-stone-200 shadow-sm">
+                    <h4 class="font-bold text-stone-700">Partner Scaling</h4>
+                    <p class="text-sm text-stone-600 mt-1">Moving beyond general SIs to enable <strong>manufacturing-niche partners</strong> who understand the factory floor.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: The Gap (CTA) -->
+        <section id="gap" class="bg-amber-50 rounded-2xl border border-amber-200 overflow-hidden shadow-sm">
+            <div class="p-8 md:p-12 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <span class="text-3xl">⚠️</span>
+                        <h2 class="text-2xl font-bold text-amber-900">The "Ownership Vacuum": A Critical Risk</h2>
+                    </div>
+                    <p class="text-amber-900/80 leading-relaxed text-lg mb-6">
+                        Despite having the world's largest manufacturing deal (Siemens) and a leading technical strategy, there is <strong>no business owner</strong> officially in charge of the Manufacturing vertical for DACH/CEE.
+                    </p>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-start">
+                            <span class="text-amber-600 font-bold mr-2">➤</span>
+                            <span class="text-amber-800 text-sm"><strong>The Risk:</strong> We lack a counterpart to drive regional accountability, campaigns, and expansion strategy (CEE).</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-amber-600 font-bold mr-2">➤</span>
+                            <span class="text-amber-800 text-sm"><strong>The Ask:</strong> Define who owns the "Business Perspective" to ensure technical momentum translates to revenue.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="md:col-span-1 flex justify-center">
+                    <div class="bg-white p-6 rounded-xl shadow-sm text-center border border-amber-100 w-full">
+                        <h3 class="text-amber-800 font-bold mb-2">Current Status</h3>
+                        <div class="text-4xl font-bold text-stone-300 mb-2">?</div>
+                        <p class="text-xs text-stone-500 uppercase tracking-widest">Business Owner Missing</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-12 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm">Prepared for the Area VP DACH/CEE Briefing | FY27 Strategy</p>
+            <p class="text-xs mt-2 text-stone-600">Strictly Confidential</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Data Storage ---
+        const regionsData = {
+            germany: {
+                title: "Germany",
+                status: "Global Benchmark",
+                statusColor: "text-emerald-600",
+                description: "The engine room of our success. Home to our largest global manufacturing deal.",
+                keyCustomers: ["Siemens (Global #1)", "Siemens Energy", "Siemens Healthineers", "VW", "BMW Group"],
+                motions: ["tesa", "Kiwigrid", "Sievert", "FFT"],
+                challenge: "Maintenance of high-touch relationships while scaling mid-market."
+            },
+            switzerland: {
+                title: "Switzerland",
+                status: "Challenged",
+                statusColor: "text-amber-600",
+                description: "Facing heavy Microsoft dominance. Requires a tactical 'Best of Breed' narrative.",
+                keyCustomers: ["Targeting Pharma & Precision Engineering"],
+                motions: ["Limited active engagement due to Azure stack dominance"],
+                challenge: "Winning against the full Microsoft stack."
+            },
+            austria: {
+                title: "Austria / CEE",
+                status: "Greenfield Opportunity",
+                statusColor: "text-sky-600",
+                description: "Currently zero interaction. Represents the largest untapped expansion opportunity for FY27.",
+                keyCustomers: ["None (Target List Building)"],
+                motions: ["Expansion Planned for FY27"],
+                challenge: "Zero footprint; requires structured entry plan."
+            }
+        };
+
+        const playsData = {
+            itot: {
+                title: "IT/OT Integration",
+                description: "Unifying shop-floor telemetry (sensors/PLCs) with enterprise business systems. This is the core of the <strong>Siemens 'Data Mesh' success</strong> story, proving we can handle operational reality."
+            },
+            sap: {
+                title: "SAP + Non-SAP Fusion",
+                description: "Breaking silos by combining SAP ERP data with real-time industrial telemetry. This provides the C-suite with a true 360° view of operations that SAP alone cannot provide."
+            },
+            timeseries: {
+                title: "Time Series Analytics",
+                description: "Delivering high-performance analysis on high-frequency machine data. Critical for predictive maintenance and quality assurance use cases where speed and volume are paramount."
+            },
+            uns: {
+                title: "Unified Name Space (UNS)",
+                description: "Positioning Snowflake as the central architectural hub for modern industrial data. We become the 'single source of truth' for the entire factory of the future."
+            }
+        };
+
+        // --- Interaction Logic ---
+
+        // 1. Navigation Scroll
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 2. Play Selection Logic
+        function selectPlay(playKey) {
+            const container = document.getElementById('playDetail');
+            const titleEl = document.getElementById('playTitle');
+            const descEl = document.getElementById('playDescription');
+            
+            // Highlight active card styling
+            document.querySelectorAll('.play-card').forEach(card => {
+                if(card.dataset.play === playKey) {
+                    card.classList.remove('bg-white', 'border-stone-200');
+                    card.classList.add('bg-sky-50', 'border-sky-300', 'ring-2', 'ring-sky-500');
+                } else {
+                    card.classList.add('bg-white', 'border-stone-200');
+                    card.classList.remove('bg-sky-50', 'border-sky-300', 'ring-2', 'ring-sky-500');
+                }
+            });
+
+            // Populate and Show Detail
+            const play = playsData[playKey];
+            titleEl.innerHTML = play.title;
+            descEl.innerHTML = play.description;
+            
+            container.classList.remove('hidden');
+            // Little animation for attention
+            container.classList.remove('opacity-0');
+            container.classList.add('animate-pulse');
+            setTimeout(() => container.classList.remove('animate-pulse'), 500);
+        }
+
+        // 3. Region Selection Logic (triggered by chart click)
+        function updateRegionPanel(regionKey) {
+            const panel = document.getElementById('regionDetailPanel');
+            const data = regionsData[regionKey];
+
+            if (!data) return;
+
+            const html = `
+                <div class="animate-fade-in-up">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-2xl font-bold text-stone-800">${data.title}</h3>
+                        <span class="px-3 py-1 rounded-full bg-stone-100 text-xs font-bold uppercase ${data.statusColor}">${data.status}</span>
+                    </div>
+                    <p class="text-stone-600 mb-6 border-l-4 border-stone-300 pl-4 italic">${data.description}</p>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="text-xs font-bold text-stone-500 uppercase tracking-wide">Key Customers/Targets</h4>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                ${data.keyCustomers.map(c => `<span class="bg-sky-50 text-sky-800 text-xs px-2 py-1 rounded border border-sky-100">${c}</span>`).join('')}
+                            </div>
+                        </div>
+                        
+                         ${data.motions[0] !== "Limited active engagement due to Azure stack dominance" && data.motions[0] !== "Expansion Planned for FY27" ? `
+                        <div>
+                            <h4 class="text-xs font-bold text-stone-500 uppercase tracking-wide">Regional Motions</h4>
+                            <div class="text-sm text-stone-600 mt-1">${data.motions.join(', ')}</div>
+                        </div>
+                        ` : ''}
+
+                        <div class="bg-stone-50 p-4 rounded-lg mt-4">
+                            <h4 class="text-xs font-bold text-amber-700 uppercase tracking-wide mb-1">Key Challenge</h4>
+                            <p class="text-sm text-stone-700">${data.challenge}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            panel.innerHTML = html;
+        }
+
+        // --- Chart Initialization ---
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Chart 1: Regional Scatter Plot
+            const ctxRegion = document.getElementById('regionalChart').getContext('2d');
+            const regionalChart = new Chart(ctxRegion, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Regions',
+                        data: [
+                            { x: 95, y: 90, r: 25, region: 'germany' },  // Germany: High Opp, High Maturity
+                            { x: 60, y: 30, r: 15, region: 'switzerland' }, // Switzerland: Med Opp, Low Maturity
+                            { x: 80, y: 10, r: 20, region: 'austria' }   // Austria/CEE: High Opp, Zero Maturity
+                        ],
+                        backgroundColor: [
+                            'rgba(5, 150, 105, 0.6)', // Emerald (Germany)
+                            'rgba(217, 119, 6, 0.6)', // Amber (Switzerland)
+                            'rgba(2, 132, 199, 0.6)'  // Sky (Austria/CEE)
+                        ],
+                        borderColor: [
+                            'rgb(5, 150, 105)',
+                            'rgb(217, 119, 6)',
+                            'rgb(2, 132, 199)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Market Opportunity Size' },
+                            min: 40, max: 110,
+                            grid: { display: false }
+                        },
+                        y: {
+                            title: { display: true, text: 'Current Maturity / Engagement' },
+                            min: 0, max: 110
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const map = { 'germany': 'Germany', 'switzerland': 'Switzerland', 'austria': 'Austria / CEE' };
+                                    return map[context.raw.region];
+                                }
+                            }
+                        },
+                        legend: { display: false }
+                    },
+                    onClick: (e) => {
+                        const points = regionalChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true);
+                        if (points.length) {
+                            const firstPoint = points[0];
+                            const regionKey = regionalChart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index].region;
+                            updateRegionPanel(regionKey);
+                        }
+                    }
+                }
+            });
+
+            // Initialize detail panel with Germany
+            updateRegionPanel('germany');
+
+            // Chart 2: Strategy Horizontal Bar
+            const ctxStrategy = document.getElementById('strategyChart').getContext('2d');
+            const strategyChart = new Chart(ctxStrategy, {
+                type: 'bar',
+                data: {
+                    labels: ['Auto Ramp-up', 'Reference Velocity', 'Partner Scaling', 'Address Product Gaps', 'SE Industrialization'],
+                    datasets: [{
+                        label: 'Strategic Priority Level',
+                        data: [90, 85, 75, 60, 80],
+                        backgroundColor: [
+                            'rgba(3, 105, 161, 0.7)', // Sky
+                            'rgba(5, 150, 105, 0.7)', // Emerald
+                            'rgba(217, 119, 6, 0.7)', // Amber
+                            'rgba(87, 83, 78, 0.7)',  // Stone
+                            'rgba(87, 83, 78, 0.7)'   // Stone
+                        ],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Horizontal bar
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            display: false, // Hide x-axis numbers for cleaner look
+                            max: 100
+                        },
+                        y: {
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Priority Score: ' + context.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
